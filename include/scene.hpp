@@ -19,8 +19,6 @@ namespace ecs
     class Scene
     {
         public:
-            Scene() = default;
-
             inline Entity createEntity();
             void clear();
             void launchSystems();
