@@ -1,0 +1,5 @@
+.vscode
+*.vgcore
+*.so
+*.out
+obj
