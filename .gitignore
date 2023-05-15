@@ -1,5 +1,5 @@
 .vscode
-*.vgcore
+vgcore.*
 *.so
 *.out
 obj
