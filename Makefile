@@ -12,7 +12,6 @@ FILE_TYPE = .cpp
 SECTION_NAME = ECS
 
 SRC =\
-	${SRC_PATH}/main.cpp\
 	${SRC_PATH}/scene.cpp\
 
 INCLUDE =\
@@ -23,18 +22,18 @@ SRC_COUNT = ${shell echo ${SRC} | wc -w}
 OBJ = ${SRC:${SRC_PATH}/%${FILE_TYPE}=${BUILD_PATH}/%.o}
 OBJ_FLAGS = -g3 -O3 -W -Wall -Wextra -Werror -std=c++20 ${INCLUDE}
 BIN_FLAGS =
-BIN_NAME = ecs.out
+BIN_NAME = ecs.so
 
 all: ${BIN_NAME}
 
 ${BUILD_PATH}/%.o: ${SRC_PATH}/%${FILE_TYPE}
 	@mkdir -p ${dir $@}
 	@echo "[${SECTION_NAME}] [${call INDEX, "$<", ${SRC}}/${SRC_COUNT}] $<"
-	@${COMPILER} -MD ${OBJ_FLAGS} -c $< -o $@
+	@${COMPILER} -MD -fPIC ${OBJ_FLAGS} -c $< -o $@
 
 ${BIN_NAME}: ${OBJ}
 	@echo "[${SECTION_NAME}] final build: ${BIN_NAME}"
-	@${COMPILER} -o ${BIN_NAME} ${OBJ} ${BIN_FLAGS}
+	@${COMPILER} -shared -o ${BIN_NAME} ${OBJ} ${BIN_FLAGS}
 
 clean:
 	@echo "[${SECTION_NAME}] remove: ${BUILD_PATH}"
