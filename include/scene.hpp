@@ -10,13 +10,14 @@
 
 #include "ecs.hpp"
 #include "isystem.hpp"
+#include "singleton.hpp"
 
 namespace ecs
 {
     using ComponentsContainer = std::unordered_map<std::type_index, std::any>;
     using SystemsContainer = std::unordered_map<Entity, std::vector<std::unique_ptr<ISystem>>>;
 
-    class Scene
+    class Scene : public Singleton<Scene>
     {
         public:
             inline Entity createEntity();
@@ -63,14 +64,13 @@ namespace ecs
     class SystemManager : public ISystem
     {
         public:
-            SystemManager(Scene &scene, System<COMPONENTS...> system);
+            SystemManager(System<COMPONENTS...> system);
 
             void launch(const Entity &entity) override;
             bool requiredComponents(const std::type_info &type) const override;
             void *getPtr() const override;
 
         private:
-            Scene &m_scene;
             System<COMPONENTS...> m_system;
     };
 }

@@ -18,6 +18,8 @@
 #include <any>
 #include <typeindex>
 #include <algorithm>
+#include <filesystem>
+#include <dlfcn.h>
 #include <boost/type_index.hpp>
 
 namespace ecs

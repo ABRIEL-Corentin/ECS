@@ -90,13 +90,13 @@ namespace ecs
 
         if (systems == m_systems.end()) {
             m_systems.insert({entity, std::vector<std::unique_ptr<ISystem>>()});
-            m_systems.at(entity).push_back(std::make_unique<SystemManager<COMPONENTS...>>(*this, system));
+            m_systems.at(entity).push_back(std::make_unique<SystemManager<COMPONENTS...>>(system));
         } else {
             for (auto it = systems->second.begin(); it != systems->second.end(); ++it)
                 if ((*it)->getPtr() == system)
                     return false;
 
-            systems->second.push_back(std::make_unique<SystemManager<COMPONENTS...>>(*this, system));
+            systems->second.push_back(std::make_unique<SystemManager<COMPONENTS...>>(system));
         }
         return true;
     }
@@ -149,16 +149,15 @@ namespace ecs
     }
 
     template<typename ... COMPONENTS>
-    SystemManager<COMPONENTS...>::SystemManager(Scene &scene, System<COMPONENTS...> system)
-        : m_scene(scene),
-          m_system(system)
+    SystemManager<COMPONENTS...>::SystemManager(System<COMPONENTS...> system)
+        : m_system(system)
     { }
 
     template<typename ... COMPONENTS>
     void SystemManager<COMPONENTS...>::launch(const Entity &entity)
     {
         if (m_system)
-            m_system(1, *m_scene.getComponent<COMPONENTS>(entity)...);
+            m_system(1, *Scene::getInstance().getComponent<COMPONENTS>(entity)...);
     }
 
     template<typename ... COMPONENTS>
